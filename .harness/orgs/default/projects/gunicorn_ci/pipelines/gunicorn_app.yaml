@@ -54,6 +54,9 @@ pipeline:
                     image: python:3.13
                     shell: Bash
                     command: /harness/venv/bin/pytest --cov=gunicorn
+                  when:
+                    stageStatus: Success
+                    condition: <+pipeline.variables.skip_gunicorn_tests> != "true"
               - step:
                   type: Run
                   name: Build Package
@@ -78,3 +81,9 @@ pipeline:
                       twine upload --repository-url http://ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/api/v1/pypi/pypi/ \
                         -u admin -p <+secrets.getValue("artifact_keeper_pypi_token")> \
                         /harness/dist/*
+        variables:
+          - name: skip_gunicorn_tests
+            type: String
+            description: ""
+            required: true
+            value: <+input>.default(false).selectOneFrom(false,true)
