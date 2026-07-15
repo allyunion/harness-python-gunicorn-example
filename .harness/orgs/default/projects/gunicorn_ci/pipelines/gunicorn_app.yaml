@@ -178,6 +178,7 @@ pipeline:
                     remoteCacheRepo: http://ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/docker
                     runAsUser: "0"
                     envVariables:
+                      PLUGIN_REGISTRY: ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080
                       PLUGIN_INSECURE: "true"
   variables:
     - name: skip_build_gunicorn
