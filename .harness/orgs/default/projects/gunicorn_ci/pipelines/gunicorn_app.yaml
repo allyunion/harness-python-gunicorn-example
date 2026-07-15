@@ -169,7 +169,7 @@ pipeline:
                   identifier: Push_to_Docker_Artifact_Keeper
                   spec:
                     connectorRef: docker_images
-                    repo: http://ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/docker/gunicorn-hello
+                    repo: ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/docker/gunicorn-hello
                     tags:
                       - <+pipeline.sequenceId>
                     caching: true
