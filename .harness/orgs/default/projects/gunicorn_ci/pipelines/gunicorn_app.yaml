@@ -79,7 +79,7 @@ pipeline:
                     command: |-
                       pip install twine
                       twine upload --repository-url http://ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/pypi/pypi/ \
-                        -u admin -p <+secrets.getValue("artifact_keeper_pypi_token")> --verbose \
+                        -u admin -p <+secrets.getValue("artifact_keeper_pypi_token")> \
                         /harness/dist/*
         variables:
           - name: skip_gunicorn_tests
@@ -87,3 +87,36 @@ pipeline:
             description: ""
             required: true
             value: <+input>.default(false).selectOneFrom(false,true)
+    - stage:
+        name: build_app
+        identifier: build_app
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: true
+          buildIntelligence:
+            enabled: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: k8s_docker_desktop_connector
+              namespace: gunicorn_harness
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Download build_gunicorn artifacts
+                  identifier: Download_build_gunicorn_artifacts
+                  spec:
+                    connectorRef: dockerhub_anonymous_connector
+                    image: python:3.13-slim
+                    shell: Bash
+                    command: |-
+                      pip install --no-deps -d /harness/wheels \
+                        --index-url http://admin:<+secrets.getValue("artifact_keeper_pypi_token")>@ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/pypi/pypi/simple \
+                        gunicorn==26.0.0
