@@ -1,0 +1,8 @@
+name: gunicorn-hello
+replicas: 1
+
+image: <+artifacts.primary.image>
+
+containerPort: 8000
+servicePort: 8000
+healthPath: /healthz

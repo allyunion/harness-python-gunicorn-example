@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gunicorn-hello
+  name: {{.Values.name}}
   labels:
-    app: gunicorn-hello
+    app: {{.Values.name}}
 spec:
-  replicas: 1
+  replicas: {{int .Values.replicas}}
   selector:
     matchLabels:
-      app: gunicorn-hello
+      app: {{.Values.name}}
   template:
     metadata:
       labels:
-        app: gunicorn-hello
+        app: {{.Values.name}}
     spec:
       containers:
-        - name: gunicorn-hello
-          image: <+artifacts.primary.image>
+        - name: {{.Values.name}}
+          image: {{.Values.image}}
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
-              containerPort: 8000
+              containerPort: {{int .Values.containerPort}}
               protocol: TCP
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: {{.Values.healthPath}}
               port: http
             initialDelaySeconds: 3
             periodSeconds: 5
@@ -32,7 +32,7 @@ spec:
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: {{.Values.healthPath}}
               port: http
             initialDelaySeconds: 10
             periodSeconds: 10
@@ -49,15 +49,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: gunicorn-hello
+  name: {{.Values.name}}
   labels:
-    app: gunicorn-hello
+    app: {{.Values.name}}
 spec:
   type: ClusterIP
   selector:
-    app: gunicorn-hello
+    app: {{.Values.name}}
   ports:
     - name: http
-      port: 8000
+      port: {{int .Values.servicePort}}
       targetPort: http
       protocol: TCP
