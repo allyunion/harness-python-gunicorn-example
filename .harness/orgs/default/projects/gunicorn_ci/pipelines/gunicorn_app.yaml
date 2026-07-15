@@ -155,8 +155,8 @@ pipeline:
                     image: python:3.13
                     shell: Bash
                     command: |-
-                      python -m venv /harness/test-env
-                      /harness/test-env/bin/pip install --no-cache-dir \
+                      python -m venv /harness/test-venv
+                      /harness/test-venv/bin/pip install --no-cache-dir \
                         --index-url http://admin:<+secrets.getValue("artifact_keeper_pypi_token")>@ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/pypi/pypi/simple \
                         --extra-index-url https://pypi.org/simple \
                         gunicorn
