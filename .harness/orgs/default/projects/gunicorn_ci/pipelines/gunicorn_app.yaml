@@ -56,7 +56,7 @@ pipeline:
                     command: /harness/venv/bin/pytest --cov=gunicorn
                   when:
                     stageStatus: Success
-                    condition: <+pipeline.variables.skip_gunicorn_tests> != "true"
+                    condition: <+pipeline.variables.skip_gunicorn_tests> == "false"
               - step:
                   type: Run
                   name: Build Package
