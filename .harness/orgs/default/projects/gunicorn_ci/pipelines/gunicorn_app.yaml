@@ -26,7 +26,7 @@ pipeline:
             type: KubernetesDirect
             spec:
               connectorRef: k8s_docker_desktop_connector
-              namespace: gunicorn_harness
+              namespace: gunicorn-harness
               automountServiceAccountToken: true
               nodeSelector: {}
               os: Linux
