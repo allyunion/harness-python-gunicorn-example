@@ -27,8 +27,10 @@ service:
                   connectorRef: github_harness_repo_connector
                   gitFetchType: Branch
                   paths:
-                    - kubernetes/gunicorn-app.yaml
+                    - kubernetes/gunicorn-hello/gunicorn-app.yaml
                   branch: main
+              valuesPaths:
+                - kubernetes/gunicorn-hello/Values.yaml
               skipResourceVersioning: false
               enableDeclarativeRollback: false
     type: Kubernetes
