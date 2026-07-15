@@ -79,7 +79,7 @@ pipeline:
                     command: |-
                       pip install twine
                       twine upload --repository-url http://ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/pypi \
-                        -u admin -p <+secrets.getValue("artifact_keeper_pypi_token")> --verbose \
+                        -u __token__ -p <+secrets.getValue("artifact_keeper_pypi_token")> --verbose \
                         /harness/dist/*
         variables:
           - name: skip_gunicorn_tests
