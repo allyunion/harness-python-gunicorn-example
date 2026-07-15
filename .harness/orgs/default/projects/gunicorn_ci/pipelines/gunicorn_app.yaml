@@ -43,3 +43,23 @@ pipeline:
                     command: |-
                       pip install -e .
                       pip install -r requirements_test.txt
+              - step:
+                  type: Run
+                  name: Run Gunicorn Test Suite
+                  identifier: Run_Gunicorn_Test_Suite
+                  spec:
+                    connectorRef: dockerhub_anonymous_connector
+                    image: python:3.13-slim
+                    shell: Bash
+                    command: pytest --cov=gunicorn
+              - step:
+                  type: Run
+                  name: Build Wheel
+                  identifier: Build_Wheel
+                  spec:
+                    connectorRef: dockerhub_anonymous_connector
+                    image: python:3.13-slim
+                    shell: Bash
+                    command: |-
+                      pip install build
+                      python -m build
