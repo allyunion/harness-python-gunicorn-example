@@ -28,12 +28,6 @@ pipeline:
             spec:
               connectorRef: k8s_docker_desktop_connector
               namespace: gunicorn-harness
-              volumes:
-                - mountPath: /harness
-                  type: PersistentVolumeClaim
-                  spec:
-                    claimName: gunicorn-test
-                    readOnly: false
               automountServiceAccountToken: true
               nodeSelector: {}
               os: Linux
