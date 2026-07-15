@@ -104,6 +104,7 @@ pipeline:
             spec:
               connectorRef: k8s_docker_desktop_connector
               namespace: gunicorn_harness
+              automountServiceAccountToken: true
               nodeSelector: {}
               os: Linux
           execution:
@@ -117,6 +118,39 @@ pipeline:
                     image: python:3.13-slim
                     shell: Bash
                     command: |-
-                      pip install --no-deps -d /harness/wheels \
+                      python -m venv /harness/pylibrary
+                      /harness/pylibrary/bin/pip install --no-cache-dir \
                         --index-url http://admin:<+secrets.getValue("artifact_keeper_pypi_token")>@ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/pypi/pypi/simple \
-                        gunicorn==26.0.0
+                        --extra-index-url https://pypi.org/simple \
+                        gunicorn
+              - step:
+                  type: GitClone
+                  name: Clone harness-python-gunicorn-app
+                  identifier: Clone_harnesspythongunicornapp
+                  spec:
+                    connectorRef: github_primary_repo_connector
+                    build:
+                      type: branch
+                      spec:
+                        branch: main
+              - step:
+                  type: Run
+                  name: Install Dependencies
+                  identifier: Install_Dependencies
+                  spec:
+                    connectorRef: dockerhub_anonymous_connector
+                    image: python:3.13-slim
+                    shell: Bash
+                    command: /harness/pylibrary/bin/pip install --no-cache-dir -r harness-python-gunicorn-app/requirements.txt
+              - step:
+                  type: Run
+                  name: Run Tests
+                  identifier: Run_Tests
+                  spec:
+                    connectorRef: dockerhub_anonymous_connector
+                    image: python:3.13
+                    shell: Bash
+                    command: |-
+                      cp -r /harness/pylibrary /harness/test-venv
+                      /harness/test-venv/bin/pip install --no-cache-dir -r harness-python-gunicorn-app/requirements-test.txt
+                      cd harness-python-gunicorn-app && /harness/test-venv/bin/python -m pytest
