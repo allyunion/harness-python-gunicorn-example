@@ -169,12 +169,13 @@ pipeline:
                   identifier: Push_to_Docker_Artifact_Keeper
                   spec:
                     connectorRef: docker_images
-                    repo: http://ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/docker_images/gunicorn-hello
+                    repo: http://ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/docker/gunicorn-hello
                     tags:
                       - <+pipeline.sequenceId>
                     caching: true
                     dockerfile: harness-python-gunicorn-app/Dockerfile
                     context: harness-python-gunicorn-app
+                    remoteCacheRepo: http://ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/docker
                     runAsUser: "0"
                     envVariables:
                       PLUGIN_INSECURE: "true"
