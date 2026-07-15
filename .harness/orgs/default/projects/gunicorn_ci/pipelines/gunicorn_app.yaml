@@ -43,7 +43,6 @@ pipeline:
                     shell: Bash
                     command: |-
                       python -m venv /harness/venv
-                      ls /harness
                       /harness/venv/bin/pip install -e .
                       /harness/venv/bin/pip install -r requirements_test.txt
               - step:
@@ -54,10 +53,7 @@ pipeline:
                     connectorRef: dockerhub_anonymous_connector
                     image: python:3.13
                     shell: Bash
-                    command: |-
-                      python -m venv /harness/venv
-                      source /harness/venv/activate
-                      pytest --cov=gunicorn
+                    command: /harness/venv/bin/pytest --cov=gunicorn
               - step:
                   type: Run
                   name: Build Wheel
@@ -67,7 +63,5 @@ pipeline:
                     image: python:3.13
                     shell: Bash
                     command: |-
-                      python -m venv /harness/venv
-                      source /harness/venv/activate
-                      pip install build
-                      python -m build
+                      /harness/venv/bin/pip install build
+                      /harness/venv/bin/python -m build
