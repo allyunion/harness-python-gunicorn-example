@@ -11,7 +11,7 @@ service:
           sources:
             - spec:
                 connectorRef: docker_images
-                imagePath: gunicorn-hello
+                imagePath: docker_images/gunicorn-hello
                 tag: <+pipeline.sequenceId>
                 digest: ""
               identifier: gunicorn_hello_image
