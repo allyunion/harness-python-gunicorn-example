@@ -1,0 +1,21 @@
+connector:
+  name: docker_images
+  identifier: docker_images
+  description: ""
+  accountIdentifier: cy_yk9SDTgeqkV7cNe6Jbw
+  orgIdentifier: default
+  projectIdentifier: gunicorn_ci
+  type: DockerRegistry
+  spec:
+    dockerRegistryUrl: http://ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080
+    providerType: Other
+    auth:
+      type: UsernamePassword
+      spec:
+        username: admin
+        passwordRef: artifact_keeper_docker_token
+    delegateSelectors:
+      - gunicorn-kubernetes-delegate
+    executeOnDelegate: true
+    proxy: false
+    ignoreTestConnection: false

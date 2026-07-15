@@ -1,0 +1,10 @@
+secret:
+  type: SecretText
+  name: artifact_keeper_pypi_token
+  identifier: artifact_keeper_pypi_token
+  orgIdentifier: default
+  projectIdentifier: gunicorn_ci
+  description: ""
+  spec:
+    secretManagerIdentifier: harnessSecretManager
+    valueType: Inline
