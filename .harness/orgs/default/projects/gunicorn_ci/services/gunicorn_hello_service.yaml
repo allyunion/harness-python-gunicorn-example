@@ -3,3 +3,17 @@ service:
   identifier: gunicorn_hello_service
   orgIdentifier: default
   projectIdentifier: gunicorn_ci
+  serviceDefinition:
+    spec:
+      artifacts:
+        primary:
+          primaryArtifactRef: <+input>
+          sources:
+            - spec:
+                connectorRef: docker_images
+                imagePath: gunicorn-hello
+                tag: <+pipeline.sequenceId>
+                digest: ""
+              identifier: gunicorn_hello_image
+              type: DockerRegistry
+    type: Kubernetes
