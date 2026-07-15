@@ -87,6 +87,9 @@ pipeline:
             description: ""
             required: true
             value: <+input>.default(false).selectOneFrom(false,true)
+        when:
+          pipelineStatus: Success
+          condition: <+pipeline.variables.skip_build_gunicorn> == "false"
     - stage:
         name: build_app
         identifier: build_app
@@ -154,3 +157,9 @@ pipeline:
                       cp -r /harness/pylibrary /harness/test-venv
                       /harness/test-venv/bin/pip install --no-cache-dir -r harness-python-gunicorn-app/requirements-test.txt
                       cd harness-python-gunicorn-app && /harness/test-venv/bin/python -m pytest
+  variables:
+    - name: skip_build_gunicorn
+      type: String
+      description: skip_build_gunicorn
+      required: true
+      value: <+input>.default(false).selectOneFrom(false,true)
