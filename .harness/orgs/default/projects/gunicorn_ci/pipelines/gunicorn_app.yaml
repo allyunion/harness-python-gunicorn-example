@@ -190,6 +190,54 @@ pipeline:
                     envVariables:
                       PLUGIN_REGISTRY: ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080
                       PLUGIN_INSECURE: "true"
+    - stage:
+        name: deploy_gunicorn_app
+        identifier: deploy_gunicorn_app
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: gunicorn_hello_service
+            serviceInputs:
+              serviceDefinition:
+                type: Kubernetes
+                spec:
+                  artifacts:
+                    primary:
+                      primaryArtifactRef: <+input>
+                      sources: <+input>
+          environment:
+            environmentRef: dev
+            gitBranch: main
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: kubernetes
+          execution:
+            steps:
+              - step:
+                  name: Rollout Deployment
+                  identifier: rolloutDeployment
+                  type: K8sRollingDeploy
+                  timeout: 10m
+                  spec:
+                    skipDryRun: false
+                    pruningEnabled: false
+            rollbackSteps:
+              - step:
+                  name: Rollback Rollout Deployment
+                  identifier: rollbackRolloutDeployment
+                  type: K8sRollingRollback
+                  timeout: 10m
+                  spec:
+                    pruningEnabled: false
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
   variables:
     - name: skip_build_gunicorn
       type: String
