@@ -174,7 +174,7 @@ pipeline:
                       - <+pipeline.sequenceId>
                     caching: true
                     dockerfile: harness-python-gunicorn-app/Dockerfile
-                    context: harness-python-gunicorn-app
+                    context: /harness
                     remoteCacheRepo: http://ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/docker
                     runAsUser: "0"
                     envVariables:
