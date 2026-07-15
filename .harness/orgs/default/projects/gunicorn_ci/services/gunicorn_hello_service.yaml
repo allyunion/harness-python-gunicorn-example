@@ -1,0 +1,5 @@
+service:
+  name: gunicorn_hello_service
+  identifier: gunicorn_hello_service
+  orgIdentifier: default
+  projectIdentifier: gunicorn_ci
