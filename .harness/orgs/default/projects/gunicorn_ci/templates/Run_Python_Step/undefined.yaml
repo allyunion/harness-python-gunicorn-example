@@ -1,0 +1,14 @@
+template:
+  name: Run Python Step
+  type: Step
+  projectIdentifier: gunicorn_ci
+  orgIdentifier: default
+  spec:
+    type: Run
+    spec:
+      connectorRef: dockerhub_anonymous_connector
+      image: python:3.13-slim
+      shell: Bash
+      command: pytest --cov=gunicorn
+  identifier: Run_Python_Step
+  versionLabel: "1"
