@@ -16,4 +16,19 @@ service:
                 digest: ""
               identifier: gunicorn_hello_image
               type: DockerRegistry
+      manifests:
+        - manifest:
+            identifier: gunicorn_hello_service_manifest
+            type: K8sManifest
+            spec:
+              store:
+                type: Github
+                spec:
+                  connectorRef: github_harness_repo_connector
+                  gitFetchType: Branch
+                  paths:
+                    - kubernetes/gunicorn-app.yaml
+                  branch: main
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
     type: Kubernetes
