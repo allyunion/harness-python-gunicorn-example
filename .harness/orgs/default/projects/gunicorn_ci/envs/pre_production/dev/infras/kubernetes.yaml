@@ -1,0 +1,13 @@
+infrastructureDefinition:
+  name: kubernetes
+  identifier: kubernetes
+  orgIdentifier: default
+  projectIdentifier: gunicorn_ci
+  environmentRef: dev
+  deploymentType: Kubernetes
+  type: KubernetesDirect
+  spec:
+    connectorRef: k8s_docker_desktop_connector
+    namespace: gunicorn-harness
+    releaseName: release-<+INFRA_KEY_SHORT_ID>
+  allowSimultaneousDeployments: false
