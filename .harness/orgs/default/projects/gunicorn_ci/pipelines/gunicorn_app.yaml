@@ -1,0 +1,45 @@
+pipeline:
+  name: gunicorn_app
+  identifier: gunicorn_app
+  projectIdentifier: gunicorn_ci
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: github_gunicorn_repo_connector
+        build: <+input>
+  stages:
+    - stage:
+        name: build_gunicorn
+        identifier: build_gunicorn
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: true
+          buildIntelligence:
+            enabled: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: k8s_docker_desktop_connector
+              namespace: gunicorn_harness
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Install Test Dependencies
+                  identifier: Install_Test_Dependencies
+                  spec:
+                    connectorRef: dockerhub_anonymous_connector
+                    image: python:3.13-slim
+                    shell: Bash
+                    command: |-
+                      pip install -e .
+                      pip install -r requirements_test.txt
