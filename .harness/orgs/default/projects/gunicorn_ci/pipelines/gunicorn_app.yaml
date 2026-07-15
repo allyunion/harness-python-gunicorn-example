@@ -78,7 +78,7 @@ pipeline:
                     shell: Bash
                     command: |-
                       pip install twine
-                      twine upload --skip-existing --repository-url http://ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/pypi/pypi/ \
+                      twine upload --repository-url http://ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/pypi/pypi/ \
                         -u admin -p <+secrets.getValue("artifact_keeper_pypi_token")> \
                         /harness/dist/*
         variables:
