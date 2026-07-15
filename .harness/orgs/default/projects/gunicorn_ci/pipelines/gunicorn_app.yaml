@@ -145,7 +145,15 @@ pipeline:
                     connectorRef: dockerhub_anonymous_connector
                     image: python:3.13-slim
                     shell: Bash
-                    command: /harness/pylibrary/bin/pip install --no-cache-dir -r harness-python-gunicorn-app/requirements.txt
+                    command: |-
+                      /harness/pylibrary/bin/pip install --no-cache-dir -r harness-python-gunicorn-app/requirements.txt
+
+                      python -m venv /harness/harness-python-gunicorn-app/pylibrary
+                      /harness/harness-python-gunicorn-app/pylibrary/bin/pip install --no-cache-dir \
+                        --index-url http://admin:<+secrets.getValue("artifact_keeper_pypi_token")>@ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/pypi/pypi/simple \
+                        --extra-index-url https://pypi.org/simple \
+                        gunicorn
+                      /harness/harness-python-gunicorn-app/pylibrary/bin/pip install --no-cache-dir -r harness-python-gunicorn-app/requirements.txt
               - step:
                   type: Run
                   name: Run Tests
@@ -174,7 +182,7 @@ pipeline:
                       - <+pipeline.sequenceId>
                     caching: true
                     dockerfile: harness-python-gunicorn-app/Dockerfile
-                    context: /harness
+                    context: harness-python-gunicorn-app
                     remoteCacheRepo: http://ak-artifact-keeper-backend.artifact-keeper.svc.cluster.local:8080/docker
                     runAsUser: "0"
                     envVariables:
